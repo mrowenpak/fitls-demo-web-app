@@ -1,27 +1,37 @@
-import { GitHubLogoIcon } from '@radix-ui/react-icons'
-import { ThemeToggle } from '~/components/theme-toggle'
-import { Button } from '~/components/ui/button'
+import { json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 
+import { ThemeToggle } from '~/components/theme-toggle'
+
+import {getWorkouts} from "../workouts-data";
+
+export const loader = async () => {
+  const workouts = await getWorkouts();
+  return json({ workouts });
+};
 export default function Index() {
+  const { workouts } = useLoaderData<typeof loader>();
+
   return (
-    <div className="relative size-full bg-white bg-dot-black/[0.2] dark:bg-black dark:bg-dot-white/[0.2]">
-      <div className="pointer-events-none absolute inset-0 bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black" />
-      <div className="flex h-dvh flex-col items-center justify-center gap-5">
-        <h1 className="font-serif text-3xl font-bold">Welcome to Rock Stack</h1>
-        <div className="flex gap-3">
-          <Button asChild>
-            <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-              Get Started
-            </a>
-          </Button>
-          <Button variant="outline" asChild>
-            <a target="_blank" href="https://github.com/front-loop/rock-stack" rel="noreferrer">
-              <GitHubLogoIcon className="mr-2 size-4" />
-              GitHub
-            </a>
-          </Button>
-          <ThemeToggle />
-        </div>
+    <div className="flex h-dvh flex-col items-center justify-center gap-5">
+      <ThemeToggle />
+      <h1 className="text-3xl font-bold">Примеры Тренировок</h1>
+      <div className="p-2">
+        {workouts.length ? (
+          <ul>
+            {workouts.map((workout) => (
+              <li key={workout.id}>
+                <Link to={`workouts/${workout.id}`}>
+                  {workout.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>
+            <i>Ничего нет</i>
+          </p>
+        )}
       </div>
     </div>
   )

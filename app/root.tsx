@@ -1,18 +1,19 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react'
 import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
+
 import { GlobalLoading } from '~/components/global-loading'
 import { themeSessionResolver } from '~/utils/session.server'
 import stylesheet from '~/styles/globals.css?url'
 import { cn } from '~/utils/cn'
 
-export const meta: MetaFunction = () => [{ title: 'Rock Stack' }]
+export const meta: MetaFunction = () => [{ title: 'Fitls Demo WebApp' }]
 
 export const links: LinksFunction = () => [
   {
     rel: 'icon',
     type: 'image/svg+xml',
-    href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪨</text></svg>',
+    href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>',
   },
   { rel: 'stylesheet', href: stylesheet },
 ]
@@ -37,7 +38,9 @@ export function App() {
       </head>
       <body>
         <GlobalLoading />
-        <Outlet />
+        <div className="max-w-3xl size-full mx-auto bg-white dark:bg-black">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
