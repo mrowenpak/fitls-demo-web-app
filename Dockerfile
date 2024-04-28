@@ -10,6 +10,9 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
+# test secret for remix app
+ENV SESSION_SECRET="some s3cr3t hash"
+
 # Install pnpm
 ARG PNPM_VERSION=8.15.6
 RUN npm install -g pnpm@$PNPM_VERSION
