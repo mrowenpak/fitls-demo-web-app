@@ -10,8 +10,9 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
-# test secret for remix app
+# необходимые переменные окружения (тестовые) для запуска remix app в продакшне
 ENV SESSION_SECRET="some s3cr3t hash"
+ENV DOMAIN_NAME="mrowenpak-fitls-demo-web-app-0cf5.twc1.net"
 
 # Install pnpm
 ARG PNPM_VERSION=8.15.6
