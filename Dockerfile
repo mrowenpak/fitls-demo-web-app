@@ -11,6 +11,7 @@ WORKDIR /app
 ENV NODE_ENV="production"
 
 # необходимые переменные окружения (тестовые) для запуска remix app в продакшне
+# @todo переделать по-нормальному
 ENV SESSION_SECRET="some s3cr3t hash"
 ENV DOMAIN_NAME="mrowenpak-fitls-demo-web-app-0cf5.twc1.net"
 

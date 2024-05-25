@@ -1,8 +1,18 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import invariant from "tiny-invariant";
 
+import ReactPlayer from 'react-player/youtube'
+
 import { Button } from '~/components/ui/button'
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader
+} from "~/components/ui/drawer"
 
 import { getWorkout } from "../workouts-data";
 
@@ -18,6 +28,13 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Workout() {
 
     const { workout } = useLoaderData<typeof loader>();
+    const [open, setOpen] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('');
+
+    const showExerciseVideo = (videoUrl: string) => {
+        setVideoUrl(videoUrl);
+        setOpen(true)
+    }
 
     return (
         <div className="bg-white dark:bg-gray-950">
@@ -41,7 +58,8 @@ export default function Workout() {
                             <div key={item.id}>
                                 <div className="flex justify-start items-center">
                                     <div className="flex-none">
-                                        <Link to={`/exercises/${item.id}`}>
+                                        {/* <Link to={`/exercises/${item.id}`}> */}
+                                        <Link to="#" onClick={() => showExerciseVideo(item.videoUrl)}>
                                             <img className="object-cover h-14 w-14 rounded-lg cursor-pointer" src={item.thumbnail} />
                                         </Link>
                                     </div>
@@ -52,14 +70,6 @@ export default function Workout() {
                                         {item.target} {item.targetUnit}
                                     </div>
                                 </div>
-                                {/* {itemNum < (workout.taskItems.length-1) && (
-                                    <div className="mt-4 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="text-gray-500 w-4 h-4">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <div className="ms-1 text-sm text-gray-500 font-medium">Отдых {item.rest} {item.restUnit}</div>
-                                    </div>
-                                )} */}
                             </div>
                         ))}
                     </div>
@@ -74,50 +84,28 @@ export default function Workout() {
                 </Button>
             </div>
 
-            {/* <div className="mt-5 p-3">
-                <h2 className="text-lg font-bold leading-none text-gray-700">Задание</h2>
-                <div className="mt-3 p-3 bg-white dark:bg-black rounded-lg">
-                    <div className="flex flex-col gap-4">
-                        {[...Array(workout.setsNum)].map((e, setNum) => (
-                            <div className="flex flex-col gap-4" key={setNum+1}>
-                                {workout.taskItems.map((item, itemNum) => (
-                                    <div key={item.id}>
-                                        <div className="flex justify-start items-center">
-                                            <div className="flex-none">
-                                                <Link to={`/exercises/${item.id}`}>
-                                                    <img className="object-cover h-14 w-14 rounded-lg cursor-pointer" src={item.thumbnail} />
-                                                </Link>
-                                            </div>
-                                            <div className="ml-4 mr-3 flex-grow text-sm md:text-xl font-medium text-gray-700 leading-tight">
-                                                {item.name}
-                                            </div>
-                                            <div className="text-sm md:text-lg text-right font-normal text-gray-500 leading-tight">
-                                                {item.target} {item.targetUnit}
-                                            </div>
-                                        </div>
-                                        {itemNum < (workout.taskItems.length-1) && (
-                                            <div className="mt-4 flex items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="text-gray-500 w-4 h-4">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
-                                                <div className="ms-1 text-sm text-gray-500 font-medium">{item.rest} {item.restUnit}</div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                                {setNum < (workout.setsNum-1) && (
-                                <div className="my-4 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="text-gray-500 w-4 h-4">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                    <div className="ms-1 text-sm text-gray-500 font-medium">{workout.rest} {workout.restUnit}</div>
-                                </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div> */}
+            <Drawer open={open} onOpenChange={setOpen}>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+                            <ReactPlayer
+                                url={videoUrl}
+                                style={{ position: 'absolute', top: 0, left: 0 }}
+                                width='100%'
+                                height='100%'
+                                playing={true}
+                                volume={0.8}
+                                muted={true}
+                            />
+                        </div>
+                    </DrawerHeader>
+                    <DrawerFooter>
+                        <DrawerClose asChild>
+                            <Button variant="outline">Отмена</Button>
+                        </DrawerClose>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
         </div>
     );
   }

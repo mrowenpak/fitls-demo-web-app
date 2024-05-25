@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import {useEffect} from "react";
 
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -14,6 +15,9 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "~/components/ui/drawer"
+
+
+import { MainButton, useWebApp, useInitData } from '@vkruglikov/react-telegram-web-app';
 
 import { getWorkout } from "../workouts-data";
 
@@ -29,6 +33,44 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Workout() {
 
     const { workout } = useLoaderData<typeof loader>();
+
+    // delete after testing
+    const WebApp = useWebApp();
+    const [initDataUnsafe, initData] = useInitData();
+
+    const fetchTest = async () => {
+        try {
+            const data = {
+                _auth: initData
+            }
+            const response = await fetch('https://3196-188-32-34-191.ngrok-free.app/workoutComplete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            // const itemData = await response.json();
+            // setItemList(itemData);
+        } catch (error) {
+            console.log('Failed to fetch from host', error);
+        }
+    };
+
+    const handleClick = () => {
+        // @todo наверно нужна какая-то проверка, но может не здесь и не так
+        // if (!initDataUnsafe.query_id) {
+        //     alert('WebViewQueryId not defined');
+        //     return;
+        // }
+
+        fetchTest();
+    };
+
+    useEffect(() => {
+        fetchTest();
+    }, []);
+
 
     return (
         <div className="bg-white dark:bg-gray-950 pb-14">
@@ -57,7 +99,7 @@ export default function Workout() {
                                                 <div className="text-sm md:text-lg font-normal text-gray-500 leading-tight">{item.target + ' ' + item.targetUnit}</div>
                                             </div>
                                             <div className="ml-auto">
-                                                <Input type="number" className="w-10 md:w-12 h-10 md:h-12 p-1 bg-white text-base md:text-lg font-bold italic text-green-600 text-center"/>
+                                                <Input type="number" inputMode="numeric" pattern="[0-9]*" className="w-10 md:w-12 h-10 md:h-12 p-1 bg-white text-base md:text-lg font-bold italic text-green-600 text-center"/>
                                             </div>
                                         </div>
                                         {itemNum < (workout.taskItems.length-1) && (
@@ -82,7 +124,6 @@ export default function Workout() {
                         ))}
                     </div>
                 </div>
-
                 <Drawer>
                     <DrawerTrigger asChild>
                         <div className="flex justify-center">
@@ -92,10 +133,13 @@ export default function Workout() {
                     <DrawerContent>
                         <DrawerHeader>
                             <DrawerTitle>Отлично, ваши результаты:</DrawerTitle>
-                            <DrawerDescription>Какая-то статистика</DrawerDescription>
+                            <DrawerDescription>
+                                Какая-то статистика
+                            </DrawerDescription>
                         </DrawerHeader>
                         <DrawerFooter>
-                            <Button>Затрекать результат</Button>
+                            <Button onClick={() => WebApp.close()}>Выполнено</Button>
+                            <MainButton text="ТГ кнопки c ответом" onClick={handleClick} />
                             <DrawerClose asChild>
                                 <Button variant="outline">Отмена</Button>
                             </DrawerClose>

@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react'
-import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
+import { PreventFlashOnWrongTheme, ThemeProvider, useTheme, Theme } from 'remix-themes'
 
 import { GlobalLoading } from '~/components/global-loading'
 import { themeSessionResolver } from '~/utils/session.server'
@@ -20,7 +20,8 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { getTheme } = await themeSessionResolver(request)
-  return { theme: getTheme() }
+  // return { theme: getTheme() }
+  return { theme: Theme.LIGHT }
 }
 
 export function App() {
@@ -35,6 +36,7 @@ export function App() {
         <Meta />
         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
       </head>
       <body>
         <GlobalLoading />
