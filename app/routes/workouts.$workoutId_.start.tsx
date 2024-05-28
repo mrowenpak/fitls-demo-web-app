@@ -54,26 +54,24 @@ export default function Workout() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.log('Failed to fetch from host', error);
         }
-    };
-
-    const handleClick = () => {
-        // @todo наверно нужна какая-то более "четкая" проверка, и может не здесь
-        if (!initDataUnsafe!.query_id) {
-            console.log('Telegram queryId is not defined');
-            return;
-        }
-
-        fetchTest();
 
         WebApp.close()
     };
 
-    // useEffect(() => {
-    //     fetchTest();
-    // }, []);
+    const handleClick = () => {
+        // @todo наверно нужна какая-то более "четкая" проверка, и может не здесь
+        // if (!initDataUnsafe!.query_id) {
+        //     console.log('Telegram queryId is not defined');
+        //     WebApp.close()
+        //     return;
+        // }
+
+        fetchTest();
+    };
 
 
     return (
