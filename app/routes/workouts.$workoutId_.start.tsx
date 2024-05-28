@@ -43,10 +43,10 @@ export default function Workout() {
             const data = {
                 _auth: initData
             }
-            const response = await fetch('https://3196-188-32-34-191.ngrok-free.app/workout-сomplete', {
+            const response = await fetch('https://3196-188-32-34-191.ngrok-free.app/workout-complete', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: JSON.stringify(data)
             })
