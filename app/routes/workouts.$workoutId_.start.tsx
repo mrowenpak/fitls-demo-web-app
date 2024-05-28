@@ -43,33 +43,37 @@ export default function Workout() {
             const data = {
                 _auth: initData
             }
-            const response = await fetch('https://3196-188-32-34-191.ngrok-free.app/workoutComplete', {
+            const response = await fetch('https://3196-188-32-34-191.ngrok-free.app/workout-сomplete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data)
             })
-            // const itemData = await response.json();
-            // setItemList(itemData);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
         } catch (error) {
             console.log('Failed to fetch from host', error);
         }
     };
 
     const handleClick = () => {
-        // @todo наверно нужна какая-то проверка, но может не здесь и не так
-        // if (!initDataUnsafe.query_id) {
-        //     alert('WebViewQueryId not defined');
-        //     return;
-        // }
+        // @todo наверно нужна какая-то более "четкая" проверка, и может не здесь
+        if (!initDataUnsafe!.query_id) {
+            console.log('Telegram queryId is not defined');
+            return;
+        }
 
         fetchTest();
+
+        WebApp.close()
     };
 
-    useEffect(() => {
-        fetchTest();
-    }, []);
+    // useEffect(() => {
+    //     fetchTest();
+    // }, []);
 
 
     return (

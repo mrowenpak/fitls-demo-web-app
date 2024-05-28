@@ -16,7 +16,7 @@ ENV SESSION_SECRET="some s3cr3t hash"
 ENV DOMAIN_NAME="mrowenpak-fitls-demo-web-app-0cf5.twc1.net"
 
 # Install pnpm
-ARG PNPM_VERSION=8.15.6
+ARG PNPM_VERSION=9.1.3
 RUN npm install -g pnpm@$PNPM_VERSION
 
 
